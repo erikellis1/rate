@@ -16,12 +16,21 @@
       }
     },
     "Ellis.Rate": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "commandName": "Project",
+        "launchBrowser": true,
+        "applicationUrl": "https://localhost:5001;http://localhost:5000",
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+    },
+    "Ellis.Rate swagger.json": {
+        "commandName": "Project",
+        "launchBrowser": true,
+        "launchUrl": "https://localhost:5001/swagger/v1/swagger.json",
+        "applicationUrl": "https://localhost:5001;http://localhost:5000",
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+        }
     }
   }
 }
