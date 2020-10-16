@@ -29,10 +29,39 @@ export class RateComponent {
 
   add() {
 
-    this.ratings.push({ id: 10, name: this.currentName, rating: this.currentRating });
+    this.http.post<RatedItemViewModel>(this.baseUrl + 'api/rate',
+      {
+         name: this.currentName,
+         rating: this.currentRating
+      })
+      .subscribe(result => {
+        this.ratings.push({ id: result.id, name: result.name, rating: result.rating });
+      }, error => console.error(error));
 
     this.currentRating = null;
     this.currentName = null;
+  }
+
+  update(rating:RatedItemViewModel) {
+    
+    this.http.put<RatedItemViewModel>(this.baseUrl + 'api/rate/' + rating.id,
+        {
+          name: rating.name,
+          rating: rating.rating
+        })
+      .subscribe(result => {
+        rating.name = result.name;
+        rating.rating = result.rating;
+      }, error => console.error(error));
+
+  }
+
+  delete(rating:RatedItemViewModel) {
+    
+    this.http.delete(this.baseUrl + 'api/rate/' + rating.id)
+      .subscribe(result => {
+        this.ratings = this.ratings.filter(x => x !== rating);
+      }, error => console.error(error));
 
   }
   

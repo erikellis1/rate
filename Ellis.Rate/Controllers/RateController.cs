@@ -1,72 +1,98 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ellis.Rate.Data;
+using Ellis.Rate.Mappers;
+using Ellis.Rate.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
+namespace Ellis.Rate.Mappers
+{
+}
 
 namespace Ellis.Rate.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     [Consumes("application/json"), Produces("application/json")]
     public class RateController : ControllerBase
     {
         private readonly ILogger _logger;
+        private readonly RateContext _rateContext;
 
-        public RateController(ILogger<RateController> logger)
+        public RateController(ILogger<RateController> logger, RateContext rateContext)
         {
             _logger = logger;
+            _rateContext = rateContext;
         }
 
         [HttpGet("", Name = "rating-get-all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<RatedItemViewModel>>> GetAllAsync()
         {
-            return new List<RatedItemViewModel>()
-            {
-                new RatedItemViewModel() {Id = 1, Name = "Item 1", Rating = 1},
-                new RatedItemViewModel() {Id = 2, Name = "Item 2", Rating = 2},
-                new RatedItemViewModel() {Id = 3, Name = "Item 3", Rating = 3},
-                new RatedItemViewModel() {Id = 4, Name = "Item 4", Rating = 4},
-                new RatedItemViewModel() {Id = 5, Name = "Item 5", Rating = 5},
-                new RatedItemViewModel() {Id = 6, Name = "Item 6", Rating = 1},
-                new RatedItemViewModel() {Id = 7, Name = "Item 7", Rating = 2},
-            };
+            var items = await _rateContext.RatedItems.ToListAsync();
+            var vms = items.Select(RatedItemMapper.ToViewModel);
+            return vms.ToList();
         }
 
-        [HttpPost("", Name = "rating-new")]
-        public async Task<ActionResult<RatedItemViewModel>> PostAsync([FromBody]RatedItemViewModel ratedItem)
+        [HttpPost("", Name = "rating-create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<ActionResult<RatedItemViewModel>> PostAsync([FromBody]RatedItemBaseViewModel ratedItem)
         {
             if (!ModelState.IsValid)
-            {
                 return UnprocessableEntity();
-            }
 
-            return ratedItem;
+            var entity = RatedItemMapper.FromViewModel(ratedItem);
+
+            _rateContext.Add(entity);
+            await _rateContext.SaveChangesAsync();
+
+            return RatedItemMapper.ToViewModel(entity);
         }
 
         [HttpPut("{id}", Name = "rating-update")]
-        public async Task<ActionResult<RatedItemViewModel>> PutAsync([FromRoute]int id, [FromBody]RatedItemViewModel ratedItem)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<ActionResult<RatedItemViewModel>> PutAsync([FromRoute]int id, [FromBody]RatedItemBaseViewModel ratedItem)
         {
             if (!ModelState.IsValid)
-            {
                 return UnprocessableEntity();
-            }
 
-            return ratedItem;
+            var entity = await _rateContext.RatedItems.FindAsync(id);
+            if (entity == null)
+                return NotFound();
+
+            RatedItemMapper.FromViewModel(ratedItem, entity);
+
+            await _rateContext.SaveChangesAsync();
+
+            return RatedItemMapper.ToViewModel(entity);
         }
-    }
 
-    public class RatedItemViewModel
-    {
-        public int Id { get; set; }
+        [HttpDelete("{id}", Name = "rating-delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<ActionResult> DeleteAsync([FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity();
 
-        [Required]
-        public string Name { get; set; }
+            var entity = await _rateContext.RatedItems.FindAsync(id);
+            if (entity == null)
+                return NotFound();
 
-        [Range(0, 5)]
-        public int Rating { get; set; }
+            _rateContext.Remove(entity);
+
+            await _rateContext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

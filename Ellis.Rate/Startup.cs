@@ -1,7 +1,9 @@
+using Ellis.Rate.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +34,9 @@ namespace Ellis.Rate
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddDbContext<RateContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("RateContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
