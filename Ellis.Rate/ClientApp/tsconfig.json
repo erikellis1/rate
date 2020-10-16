@@ -16,6 +16,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "rate-swagger-client": [
+        "dist/rate-swagger-client"
+      ],
+      "rate-swagger-client/*": [
+        "dist/rate-swagger-client/*"
+      ]
+    }
   }
 }
