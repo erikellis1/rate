@@ -11,6 +11,7 @@ namespace Ellis.Rate.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Consumes("application/json"), Produces("application/json")]
     public class RateController : ControllerBase
     {
         private readonly ILogger _logger;
