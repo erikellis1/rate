@@ -1,73 +1,74 @@
-<h1 id="tableLabel">Rate</h1>
+<h1>Rate</h1>
+
+<div class="container">
+  <div class="row sec">
+    <div class="col">
+      <input type="text" class="form-control" placeholder="Name" [(ngModel)]="currentName" />
+    </div>
+    <div class="col-5">
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="currentRating">
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="1"> 1
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="2"> 2
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="3"> 3
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="4"> 4
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="5"> 5
+        </label>
+      </div>
+    </div>
+    <div class="col-1">
+      <button class="btn btn-outline-primary" (click)="add()">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+          <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
 
 <p *ngIf="!ratings"><em>Loading...</em></p>
 
-
-<div>
-  <input type="text" class="form-control" placeholder="Name" [(ngModel)]="currentName" />
+<div class="container">
+  <div class="row sec" *ngFor="let rating of ratings">
+    <div class="col">
+      {{ rating.name }}
+    </div>
+    <div class="col-5">
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rating.rating" (change)="update(rating)">
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="1"> 1
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="2"> 2
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="3"> 3
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="4"> 4
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="5"> 5
+        </label>
+      </div>
+    </div>
+    <div class="col-1">
+      <button class="btn btn-outline-primary" (click)="delete(rating)">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-backspace" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M6.603 2h7.08a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-7.08a1 1 0 0 1-.76-.35L1 8l4.844-5.65A1 1 0 0 1 6.603 2zm7.08-1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7.08a2 2 0 0 1-1.519-.698L.241 8.65a1 1 0 0 1 0-1.302L5.084 1.7A2 2 0 0 1 6.603 1h7.08zM5.829 5.146a.5.5 0 0 0 0 .708L7.976 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z" />
+        </svg>
+      </button>
+    </div>
+  </div>
 </div>
-<div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="currentRating">
-  <label ngbButtonLabel class="btn-primary">
-    <input ngbButton type="radio" [value]="1"> 1
-  </label>
-  <label ngbButtonLabel class="btn-primary">
-    <input ngbButton type="radio" [value]="2"> 2
-  </label>
-  <label ngbButtonLabel class="btn-primary">
-    <input ngbButton type="radio" [value]="3"> 3
-  </label>
-  <label ngbButtonLabel class="btn-primary">
-    <input ngbButton type="radio" [value]="4"> 4
-  </label>
-  <label ngbButtonLabel class="btn-primary">
-    <input ngbButton type="radio" [value]="5"> 5
-  </label>
-</div>
 
-<button class="btn btn-outline-primary" (click)="add()">
-  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-  </svg>
-</button>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="ratings">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Rating</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let rating of ratings">
-      <td>{{ rating.name }}</td>
-      <td>
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rating.rating">
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="1" (change)="update(rating)"> 1
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="2" (change)="update(rating)"> 2
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="3" (change)="update(rating)"> 3
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="4" (change)="update(rating)"> 4
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="5" (change)="update(rating)"> 5
-          </label>
-        </div>
-      </td>
-      <td>
-        <button class="btn btn-outline-primary" (click)="delete(rating)">
-          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-backspace" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M6.603 2h7.08a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-7.08a1 1 0 0 1-.76-.35L1 8l4.844-5.65A1 1 0 0 1 6.603 2zm7.08-1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7.08a2 2 0 0 1-1.519-.698L.241 8.65a1 1 0 0 1 0-1.302L5.084 1.7A2 2 0 0 1 6.603 1h7.08zM5.829 5.146a.5.5 0 0 0 0 .708L7.976 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z" />
-          </svg>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>

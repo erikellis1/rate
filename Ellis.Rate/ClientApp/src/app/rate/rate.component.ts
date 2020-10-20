@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-rate',
-  templateUrl: './rate.component.html'
+  templateUrl: './rate.component.html',
+  styleUrls: ['./rate.component.css']
 })
 export class RateComponent {
   public currentName: string;
@@ -28,6 +29,8 @@ export class RateComponent {
   }
 
   add() {
+    if (this.currentName === null) { return; }
+    if (this.currentRating === null) { return; }
 
     this.http.post<RatedItemViewModel>(this.baseUrl + 'api/rate',
       {
@@ -42,8 +45,7 @@ export class RateComponent {
     this.currentName = null;
   }
 
-  update(rating:RatedItemViewModel) {
-    
+  update(rating: RatedItemViewModel) {
     this.http.put<RatedItemViewModel>(this.baseUrl + 'api/rate/' + rating.id,
         {
           name: rating.name,
@@ -56,18 +58,16 @@ export class RateComponent {
 
   }
 
-  delete(rating:RatedItemViewModel) {
-    
+  delete(rating: RatedItemViewModel) {
     this.http.delete(this.baseUrl + 'api/rate/' + rating.id)
       .subscribe(result => {
         this.ratings = this.ratings.filter(x => x !== rating);
       }, error => console.error(error));
 
   }
-  
 }
 
-interface RatedItemViewModel { 
+interface RatedItemViewModel {
   id?: number;
   name: string;
   rating?: number;
