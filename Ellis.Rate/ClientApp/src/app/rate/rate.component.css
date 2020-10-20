@@ -1,3 +1,7 @@
 .sec {
     margin-bottom: 1rem;
 }
+
+.btn-add-rating, .btn-remove-rating, .btn-group-edit-rating {
+    float: right;
+}
